@@ -1,5 +1,7 @@
 language: php
 php:
   - '7.2'
+before_script:
+  composer --working-dir=backend install
 script:
   phpunit -c backend/phpunit.xml --coverage-text

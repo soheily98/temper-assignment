@@ -23,22 +23,48 @@ class WeeklyRetentionFormatter implements ChartFormatter
         $xAxis = $this->getXAxisLabels($records);
         $xAxisCount = count($xAxis);
 
-        $series = $records->groupBy(static function (Record $record) {
-            return $record->created_at->format("Y,W");
-        })->mapWithKeys(static function ($value, $key) {
-            $keyExploded = explode(",", $key);
+        $series = $this->weekRecordsGroupedByPercentage(
+            $this->recordsGroupedByWeek($records),
+            $xAxis,
+            $xAxisCount
+        )->map(static function (Collection $value, $key) {
+            return [
+                'name' => $key,
+                'data' => $value->values(),
+            ];
+        })->values();
 
-            $date = Carbon::now();
-            $date->setISODate($keyExploded[0], $keyExploded[1]);
+        return $this->getFormattedChart($xAxis, $records->max('onboarding_percentage'), $series);
+    }
 
-            return [$date->startOfWeek()->format("Y-m-d") => $value];
-        })->map(static function (Collection $collection) use ($xAxis, $xAxisCount) {
+    private function getFormattedChart($xAxisCategories, $yAxisMax, Collection $series)
+    {
+        return (new ChartFormat())
+            ->setChart(['type' => 'spline'])
+            ->setTitle(['text' => 'Weekly retention'])
+            ->setXAxis([
+                'categories' => $xAxisCategories,
+                'title' => [
+                    'text' => 'Onboarding Step Percentage',
+                ],
+            ])
+            ->setYAxis([
+                'max' => $yAxisMax,
+                'title' => [
+                    'text' => 'Users Passed/Stuck Percentage',
+                ],
+            ])
+            ->setSeries($series->toArray());
+    }
+
+    private function weekRecordsGroupedByPercentage(Collection $records, $xAxis, $xAxisCount): Collection
+    {
+        return $records->map(static function (Collection $collection) use ($xAxis, $xAxisCount) {
             $stepsBefore = 0;
 
             $weekData = $collection->groupBy('onboarding_percentage')->map(static function (Collection $collection) {
                 return $collection->count();
-            })
-                ->sortKeysDesc();
+            })->sortKeysDesc();
 
             $totalCount = $weekData->sum();
 
@@ -56,30 +82,21 @@ class WeeklyRetentionFormatter implements ChartFormatter
                 }
             }
             return $weekData->sortKeys();
-        })->sortKeys()
-            ->map(static function (Collection $value, $key) {
-                return [
-                    'name' => $key,
-                    'data' => $value->values(),
-                ];
-            })->values();
+        })->sortKeys();
+    }
 
-        return (new ChartFormat())
-            ->setChart(['type' => 'spline'])
-            ->setTitle(['text' => 'Weekly retention'])
-            ->setXAxis([
-                'categories' => $xAxis,
-                'title' => [
-                    'text' => 'Onboarding Step Percentage',
-                ],
-            ])
-            ->setYAxis([
-                'max' => $records->max('onboarding_percentage'),
-                'title' => [
-                    'text' => 'Users Passed/Stuck Percentage',
-                ],
-            ])
-            ->setSeries($series);
+    private function recordsGroupedByWeek(Collection $records): Collection
+    {
+        return $records->groupBy(static function (Record $record) {
+            return $record->created_at->format("Y,W");
+        })->mapWithKeys(static function ($value, $key) {
+            $keyExploded = explode(",", $key);
+
+            $date = Carbon::now();
+            $date->setISODate($keyExploded[0], $keyExploded[1]);
+
+            return [$date->startOfWeek()->format("Y-m-d") => $value];
+        });
     }
 
     /**

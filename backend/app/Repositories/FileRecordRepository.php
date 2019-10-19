@@ -26,6 +26,8 @@ class FileRecordRepository implements RecordRepository
 
     /**
      * FileRecordRepository constructor.
+     *
+     * @param $filePath
      */
     public function __construct($filePath)
     {
@@ -54,7 +56,7 @@ class FileRecordRepository implements RecordRepository
 
     private function loadDataFromDisk()
     {
-        $data = collect([]);
+        $this->collection = collect([]);
 
         $fileContents = trim(File::get($this->getFilePath()));
 
@@ -63,7 +65,7 @@ class FileRecordRepository implements RecordRepository
         for ($i = 1; $i < count($fileRows); $i++) {
             $row = explode(";", trim($fileRows[$i]));
 
-            $data->add(
+            $this->collection->add(
                 new Record([
                     'user_id' => $row[0],
                     'created_at' => $row[1],
@@ -73,7 +75,5 @@ class FileRecordRepository implements RecordRepository
                 ])
             );
         }
-
-        $this->collection = $data;
     }
 }

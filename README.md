@@ -1,4 +1,4 @@
-# Temper's Assignment
+# Temper's Assignment [![Build Status](https://travis-ci.org/soheily98/temper-assignment.svg?branch=master)](https://travis-ci.org/soheily98/temper-assignment)
 To keep it simple, I put both frontend and backend projects into a single repository. So we could have a single docker-compose file to have the project up and running.
 
 ## Dependencies

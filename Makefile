@@ -9,3 +9,6 @@ prepare: prepare-frontend prepare-backend
 
 run: prepare
 	docker-compose up
+
+test: prepare-backend
+	php backend/vendor/bin/phpunit -c backend/phpunit.xml --coverage-text

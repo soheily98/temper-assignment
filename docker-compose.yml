@@ -1,0 +1,20 @@
+version: '3'
+
+services:
+  nginx:
+    depends_on:
+      - php
+    build:
+      context: .docker/nginx
+    ports:
+      - 8888:80
+    volumes:
+      - .docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
+      - ./backend:/var/www/backend/
+      - ./frontend:/var/www/frontend/
+  
+  php:
+    build:
+      context: .docker/php-fpm
+    volumes:
+      - ./backend:/var/www/backend/

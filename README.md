@@ -9,3 +9,6 @@ Just `cd` into the project's directory and run: `make run`. This will install bo
 
 ## Test
 To test, run `make test`. It will run the backend's tests and will only show test coverage results if you have `xdebug` extension enabled in your PHP setup.
+
+## Screenshot
+![an Screenshot](Screenshot.png)

@@ -17,7 +17,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        app()->singleton(RecordRepository::class, function () {
+        app()->singleton(RecordRepository::class, static function () {
             return new FileRecordRepository(storage_path('app/data.csv'));
         });
         app()->singleton(ChartFactory::class, ChartFactoryImpl::class);

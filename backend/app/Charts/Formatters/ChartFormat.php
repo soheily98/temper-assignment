@@ -4,14 +4,38 @@ namespace App\Charts\Formatters;
 
 /**
  * Class ChartFormat
+ *
  * @package App\Charts\Formatters
  */
 class ChartFormat
 {
-    private $chart, $title, $legend, $xAxis, $yAxis, $series;
+    /**
+     * @var array
+     */
+    private $chart;
 
     /**
-     * @return mixed
+     * @var array
+     */
+    private $title;
+
+    /**
+     * @var array
+     */
+    private $xAxis;
+
+    /**
+     * @var array
+     */
+    private $yAxis;
+
+    /**
+     * @var array
+     */
+    private $series;
+
+    /**
+     * @return array
      */
     public function getChart()
     {
@@ -19,7 +43,8 @@ class ChartFormat
     }
 
     /**
-     * @param mixed $chart
+     * @param array $chart
+     *
      * @return ChartFormat
      */
     public function setChart($chart)
@@ -29,7 +54,7 @@ class ChartFormat
     }
 
     /**
-     * @return mixed
+     * @return array
      */
     public function getTitle()
     {
@@ -37,7 +62,8 @@ class ChartFormat
     }
 
     /**
-     * @param mixed $title
+     * @param array $title
+     *
      * @return ChartFormat
      */
     public function setTitle($title)
@@ -47,25 +73,7 @@ class ChartFormat
     }
 
     /**
-     * @return mixed
-     */
-    public function getLegend()
-    {
-        return $this->legend;
-    }
-
-    /**
-     * @param mixed $legend
-     * @return ChartFormat
-     */
-    public function setLegend($legend)
-    {
-        $this->legend = $legend;
-        return $this;
-    }
-
-    /**
-     * @return mixed
+     * @return array
      */
     public function getXAxis()
     {
@@ -73,7 +81,8 @@ class ChartFormat
     }
 
     /**
-     * @param mixed $xAxis
+     * @param array $xAxis
+     *
      * @return ChartFormat
      */
     public function setXAxis($xAxis)
@@ -83,7 +92,7 @@ class ChartFormat
     }
 
     /**
-     * @return mixed
+     * @return array
      */
     public function getYAxis()
     {
@@ -91,7 +100,8 @@ class ChartFormat
     }
 
     /**
-     * @param mixed $yAxis
+     * @param array $yAxis
+     *
      * @return ChartFormat
      */
     public function setYAxis($yAxis)
@@ -101,7 +111,7 @@ class ChartFormat
     }
 
     /**
-     * @return mixed
+     * @return array
      */
     public function getSeries()
     {
@@ -109,7 +119,8 @@ class ChartFormat
     }
 
     /**
-     * @param mixed $series
+     * @param array $series
+     *
      * @return ChartFormat
      */
     public function setSeries($series)

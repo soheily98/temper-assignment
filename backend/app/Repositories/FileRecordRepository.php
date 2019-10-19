@@ -6,10 +6,10 @@ use App\Models\Record;
 use App\Repositories\Contracts\RecordRepository;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Storage;
 
 /**
  * Class FileRecordRepository
+ *
  * @package App\Repositories
  */
 class FileRecordRepository implements RecordRepository
@@ -45,7 +45,7 @@ class FileRecordRepository implements RecordRepository
      */
     public function all(): Collection
     {
-        if (!isset($this->collection)) {
+        if (! isset($this->collection)) {
             $this->loadDataFromDisk();
         }
 
@@ -60,9 +60,7 @@ class FileRecordRepository implements RecordRepository
 
         $fileRows = explode("\n", $fileContents);
 
-        $rowCount = count($fileRows);
-
-        for ($i = 1; $i < $rowCount; $i++) {
+        for ($i = 1; $i < count($fileRows); $i++) {
             $row = explode(";", trim($fileRows[$i]));
 
             $data->add(

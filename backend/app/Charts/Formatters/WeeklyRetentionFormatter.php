@@ -10,13 +10,11 @@ use Illuminate\Support\Collection;
 
 /**
  * Class WeeklyRetentionFormatter
+ *
  * @package App\Charts\Formatters
  */
 class WeeklyRetentionFormatter implements ChartFormatter
 {
-    /**
-     * @inheritDoc
-     */
     public function format(RecordRepository $repository): ChartFormat
     {
         /** @var Collection $records */
@@ -25,28 +23,28 @@ class WeeklyRetentionFormatter implements ChartFormatter
         $xAxis = $this->getXAxisLabels($records);
         $xAxisCount = count($xAxis);
 
-        $series = $records->groupBy(function (Record $r) {
-            return $r->created_at->format("Y,W");
-        })->mapWithKeys(function ($value, $key) {
+        $series = $records->groupBy(static function (Record $record) {
+            return $record->created_at->format("Y,W");
+        })->mapWithKeys(static function ($value, $key) {
             $keyExploded = explode(",", $key);
 
             $date = Carbon::now();
             $date->setISODate($keyExploded[0], $keyExploded[1]);
 
             return [$date->startOfWeek()->format("Y-m-d") => $value];
-        })->map(function (Collection $c) use ($xAxis, $xAxisCount) {
+        })->map(static function (Collection $collection) use ($xAxis, $xAxisCount) {
             $stepsBefore = 0;
 
-            $weekData = $c->groupBy('onboarding_percentage')->map(function (Collection $c) {
-                return $c->count();
+            $weekData = $collection->groupBy('onboarding_percentage')->map(static function (Collection $collection) {
+                return $collection->count();
             })
                 ->sortKeysDesc();
 
             $totalCount = $weekData->sum();
 
-            $weekData = $weekData->map(function ($item) use (&$stepsBefore, $totalCount) {
+            $weekData = $weekData->map(static function ($item) use (&$stepsBefore, $totalCount) {
                 $stepsBefore += $item;
-                return (int)round(($stepsBefore / $totalCount) * 100);
+                return (int) round(($stepsBefore / $totalCount) * 100);
             })->sortKeys();
 
             $lastStep = 0;
@@ -59,10 +57,10 @@ class WeeklyRetentionFormatter implements ChartFormatter
             }
             return $weekData->sortKeys();
         })->sortKeys()
-            ->map(function (Collection $value, $key) {
+            ->map(static function (Collection $value, $key) {
                 return [
                     'name' => $key,
-                    'data' => $value->values()
+                    'data' => $value->values(),
                 ];
             })->values();
 
@@ -72,20 +70,21 @@ class WeeklyRetentionFormatter implements ChartFormatter
             ->setXAxis([
                 'categories' => $xAxis,
                 'title' => [
-                    'text' => 'Onboarding Step Percentage'
-                ]
+                    'text' => 'Onboarding Step Percentage',
+                ],
             ])
             ->setYAxis([
                 'max' => $records->max('onboarding_percentage'),
                 'title' => [
-                    'text' => 'Users Passed/Stuck Percentage'
-                ]
+                    'text' => 'Users Passed/Stuck Percentage',
+                ],
             ])
             ->setSeries($series);
     }
 
     /**
      * @param Collection $records
+     *
      * @return array
      */
     private function getXAxisLabels(Collection $records): array

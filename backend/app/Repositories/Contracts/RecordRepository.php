@@ -6,6 +6,7 @@ use Illuminate\Support\Collection;
 
 /**
  * Interface RecordRepository
+ *
  * @package App\Repositories\Contracts
  */
 interface RecordRepository

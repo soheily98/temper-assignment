@@ -4,17 +4,19 @@ namespace App\Charts;
 
 /**
  * Class BasicChart
+ *
  * @package App\Charts
  */
 class Chart implements \JsonSerializable
 {
     /**
-     * @var mixed
+     * @var array
      */
     private $options;
 
     /**
      * Chart constructor.
+     *
      * @param $options
      */
     public function __construct($options)
@@ -23,7 +25,7 @@ class Chart implements \JsonSerializable
     }
 
     /**
-     * @return mixed
+     * @return array
      */
     public function jsonSerialize()
     {

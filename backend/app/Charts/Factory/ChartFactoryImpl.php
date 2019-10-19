@@ -9,6 +9,7 @@ use App\Repositories\Contracts\RecordRepository;
 
 /**
  * Class ChartFactoryImpl
+ *
  * @package App\Charts\Factory
  */
 class ChartFactoryImpl implements ChartFactory
@@ -16,6 +17,7 @@ class ChartFactoryImpl implements ChartFactory
     /**
      * @param RecordRepository $repository
      * @param ChartFormatter $formatter
+     *
      * @return Chart
      */
     public function factory(RecordRepository $repository, ChartFormatter $formatter): Chart
@@ -27,7 +29,7 @@ class ChartFactoryImpl implements ChartFactory
                 'title' => $format->getTitle(),
                 'xAxis' => $format->getXAxis(),
                 'yAxis' => $format->getYAxis(),
-                'series' => $format->getSeries()
+                'series' => $format->getSeries(),
             ]
         );
     }

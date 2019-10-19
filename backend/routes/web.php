@@ -11,14 +11,12 @@
 |
 */
 
-/** @var $router \Laravel\Lumen\Routing\Router */
-
-$router->group(['prefix' => 'api/v1'], function () use ($router) {
-    $router->group(['prefix' => 'charts'], function () use ($router) {
+$router->group(['prefix' => 'api/v1'], static function () use ($router) {
+    $router->group(['prefix' => 'charts'], static function () use ($router) {
         $router->get('weekly-retention', 'ChartsController@getWeeklyRetention');
     });
 
-    $router->get('/info', function () use ($router) {
+    $router->get('/info', static function () use ($router) {
         return $router->app->version();
     });
 });

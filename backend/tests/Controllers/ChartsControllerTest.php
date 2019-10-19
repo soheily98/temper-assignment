@@ -1,9 +1,5 @@
 <?php
 
-use App\Repositories\FileRecordRepository;
-use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Storage;
-
 class ChartsControllerTest extends TestCase
 {
     /**
